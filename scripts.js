@@ -13,9 +13,8 @@
 *---------------------OR-------------------
 * you can also use a proxy CORS, BUT don´t ever do it if it has sensitive data like passwords, adresses, emails, because a proxy CORS is nothing more than a server used to get data from the website you want, then send it to you, but they get to see your data and what you fetched for, so dont use this with passwords emails etc...
 */
-navigator.geolocation.getCurrentPosition((position) => {
-    console.log(position.coords.latitude, position.coords.longitude);
-});
+//* variavel que guardara o url do site que nos dara acesso ao mapa
+const map = 'https://www.google.com/maps/@';
 //* variavel api contem o link da api
 const api = 'http://api.openweathermap.org/data/2.5/weather';
 //* usar CORS proxy para aceder aos dados da api
@@ -26,6 +25,21 @@ const key = '7b1013440267dc18a3e3de3646adda17';
 const form = document.querySelector('form.search');
 //* seleciona o element div
 const weatherGrid = document.querySelector('.weather');
+
+navigator.geolocation.getCurrentPosition((position) => {
+    console.log(position.coords.latitude, position.coords.longitude);
+    const lat = position.coords.latitude;
+    const long = position.coords.longitude;
+    console.log('lat -> '+ lat + ' long -> '+ long);
+    const html = `
+        <div>
+            <p>Latitude: ${lat}</p>
+            <p>Longitude: ${long}</p>
+            <iframe width="500" height="400" frameborder="0" src="https://www.bing.com/maps/embed?h=400&w=500&cp=${lat}~${long}&lvl=16&typ=d&sty=h&src=SHELL&FORM=MBEDV8" scrolling="no"></iframe>
+        </div>
+    `
+    weatherGrid.innerHTML = html;
+});
 //* esta funcao vai usar a variavel 
 async function fetchWeather(city){
     //* variavel res e o resultado da consulta (parametro query) feita na api, o conteudo retornado pela api sera guardado na variavel res
@@ -61,12 +75,10 @@ function displayWeather(tempo){ //this weather is the name of the city
             <p>Temperature: ${kToC(tempo.main.temp)}Cº</p>
             <p>Wind speed: ${tempo.wind.speed} Km/h</p>
             <p>Description: ${tempo.weather[0].description}</p>
-            <p>Latitude: ${lat}</p>
-            <p>Longitude: ${longitude}</p>
         </div>
     `;
     
-    weatherGrid.innerHTML = html;
+    weatherGrid.innerHTML += html;
 }
 
 form.addEventListener('submit', handleSubmit);
