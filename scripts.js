@@ -1,17 +1,17 @@
 /*
 ! IMPORTANT - CORS -  cross origin resource sharing -
 * a domain name is an origin Ex: github.com is an origin
-* due to CORS, by default and security issues you can´t access data from a website no another website, it will give you an error, you can if it is the same wesite, ex.: 
+* due to CORS, by default and security issues you can´t access data from a website to another website, it will give you an error, you can if it is the same wesite, ex.: 
 * you can fetch data from github.com to help.github.com because it is the same origin and the origin means the same domain in this case 'github.com';
-^ if you´re using a local file... the url in browser would be something like... c://asd/asd/index.html or file:// ... you get it, so the first step to fetch data from another  website to your own is to your your file(website) in a server, it can be localhost or domain myweb.com for example,
-^ the second step, there´s is nothing you can do by your hands, because the website you´re trying to get data needs to allow your website do get the data, and this can be done by a line of code in the server of the website that you´re trying to get data from, the line is Access-Control-Allow-Origin: (your website);
-* Ex.: imagin that you want to allow myfriend.com to access data from your website you have to insert this line Access-Control-Allow-Origin: myfriend.com
+^ if you´re using a local file... the url in browser would be something like... c://asd/asd/index.html or file:// ... you get it, so the first step to fetch data from another website to your own is to your file(website) in a server, it can be localhost or domain, myweb.com for example,
+^ the second step, there´s is nothing you can do by your hands, because the website you´re trying to get data needs to allow your website to get the data, and this can be done by a line of code in the server of the website that you´re trying to get data from, the line is Access-Control-Allow-Origin: (your website);
+* Ex.: imagine that you want to allow myfriend.com to access data from your website you have to insert this line Access-Control-Allow-Origin: myfriend.com
 
 & All of this is called CORS Policy
 
 * Sometimes the error is because of the browser , if you´re using the browser to access the API, without the Access-Control-Allow-Origin you won´t go anywhere, solutions to this is using server, node.js, PHP, ruby etc...
 *---------------------OR-------------------
-* you can also use a proxy CORS, BUT don´t ever do it if it has sensitive data like passwords adresses emails, because a proxy CORS is nothing more than a server used to get data from the website you want, then send it to you, but they get to see your data and what you fetched for, so dont use this with passwords emails etc...
+* you can also use a proxy CORS, BUT don´t ever do it if it has sensitive data like passwords, adresses, emails, because a proxy CORS is nothing more than a server used to get data from the website you want, then send it to you, but they get to see your data and what you fetched for, so dont use this with passwords emails etc...
 */
 
 
@@ -20,7 +20,7 @@ const api = 'http://api.openweathermap.org/data/2.5/weather';
 //* usar CORS proxy para aceder aos dados da api
 const proxy = 'https://cors-anywhere.herokuapp.com/'
 //* in the variable key, use your openweather key, you can obtain it here https://openweathermap.org/
-const key = '(your key)';
+const key = 'your key';
 //* seleciona o elemento form
 const form = document.querySelector('form.search');
 //* seleciona o element div
@@ -67,4 +67,3 @@ function displayWeather(tempo){ //this weather is the name of the city
 }
 
 form.addEventListener('submit', handleSubmit);
-//fetchWeather('porto'); 
