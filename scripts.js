@@ -13,8 +13,9 @@
 *---------------------OR-------------------
 * you can also use a proxy CORS, BUT don´t ever do it if it has sensitive data like passwords, adresses, emails, because a proxy CORS is nothing more than a server used to get data from the website you want, then send it to you, but they get to see your data and what you fetched for, so dont use this with passwords emails etc...
 */
-
-
+navigator.geolocation.getCurrentPosition((position) => {
+    console.log(position.coords.latitude, position.coords.longitude);
+});
 //* variavel api contem o link da api
 const api = 'http://api.openweathermap.org/data/2.5/weather';
 //* usar CORS proxy para aceder aos dados da api
@@ -60,6 +61,8 @@ function displayWeather(tempo){ //this weather is the name of the city
             <p>Temperature: ${kToC(tempo.main.temp)}Cº</p>
             <p>Wind speed: ${tempo.wind.speed} Km/h</p>
             <p>Description: ${tempo.weather[0].description}</p>
+            <p>Latitude: ${lat}</p>
+            <p>Longitude: ${longitude}</p>
         </div>
     `;
     
