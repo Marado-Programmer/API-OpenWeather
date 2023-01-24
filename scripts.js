@@ -31,15 +31,21 @@ navigator.geolocation.getCurrentPosition((position) => {
     console.log('lat -> '+ lat + ' long -> '+ long);
     const geolocationApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}`
     const apicoords = fetch(`${proxy}${geolocationApi}`);
-    console.log(apicoords);
-    const html = `
-        <div>
-            <p>Latitude: ${lat}</p>
-            <p>Longitude: ${long}</p>
-            <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
-        </div>
-    `
-    weatherGrid.innerHTML = html;
+    apicoords.then(response => {
+        response.json().then(data => {
+            console.log(data);
+            const city = data.name;
+            const html = `
+            <div>
+                <p>Latitude: ${lat}</p>
+                <p>Longitude: ${long}</p>
+                <p>Cidade: ${city}</p>
+                <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
+            </div>
+            `
+            weatherGrid.innerHTML = html;
+        })
+    })
 });
 //* esta funcao vai usar a variavel 
 async function fetchWeather(city){
