@@ -23,13 +23,15 @@ const key = '7b1013440267dc18a3e3de3646adda17';
 const form = document.querySelector('form.search');
 //* seleciona o element div
 const weatherGrid = document.querySelector('.weather');
-
 navigator.geolocation.getCurrentPosition((position) => {
     console.log(position.coords.latitude, position.coords.longitude);
     const lat = position.coords.latitude;
     const long = position.coords.longitude;
     const map = `https://www.bing.com/maps/embed?h=400&w=500&cp=${lat}~${long}&lvl=19&typ=d&sty=r&src=SHELL&FORM=MBEDV8`
     console.log('lat -> '+ lat + ' long -> '+ long);
+    const geolocationApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}`
+    const apicoords = fetch(`${proxy}${geolocationApi}`);
+    console.log(apicoords);
     const html = `
         <div>
             <p>Latitude: ${lat}</p>
