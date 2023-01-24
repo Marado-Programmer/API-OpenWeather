@@ -13,8 +13,6 @@
 *---------------------OR-------------------
 * you can also use a proxy CORS, BUT don´t ever do it if it has sensitive data like passwords, adresses, emails, because a proxy CORS is nothing more than a server used to get data from the website you want, then send it to you, but they get to see your data and what you fetched for, so dont use this with passwords emails etc...
 */
-//* variavel que guardara o url do site que nos dara acesso ao mapa
-const map = 'https://www.google.com/maps/@';
 //* variavel api contem o link da api
 const api = 'http://api.openweathermap.org/data/2.5/weather';
 //* usar CORS proxy para aceder aos dados da api
@@ -30,12 +28,13 @@ navigator.geolocation.getCurrentPosition((position) => {
     console.log(position.coords.latitude, position.coords.longitude);
     const lat = position.coords.latitude;
     const long = position.coords.longitude;
+    const map = `https://www.bing.com/maps/embed?h=400&w=500&cp=${lat}~${long}&lvl=19&typ=d&sty=r&src=SHELL&FORM=MBEDV8`
     console.log('lat -> '+ lat + ' long -> '+ long);
     const html = `
         <div>
             <p>Latitude: ${lat}</p>
             <p>Longitude: ${long}</p>
-            <iframe width="500" height="400" frameborder="0" src="https://www.bing.com/maps/embed?h=400&w=500&cp=${lat}~${long}&lvl=16&typ=d&sty=h&src=SHELL&FORM=MBEDV8" scrolling="no"></iframe>
+            <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
         </div>
     `
     weatherGrid.innerHTML = html;
