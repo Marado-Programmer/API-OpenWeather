@@ -18,7 +18,7 @@ const api = 'http://api.openweathermap.org/data/2.5/weather';
 //* usar CORS proxy para aceder aos dados da api
 const proxy = 'https://cors-anywhere.herokuapp.com/'
 //* in the variable key, use your openweather key, you can obtain it here https://openweathermap.org/
-const key = '7b1013440267dc18a3e3de3646adda17';
+const key = 'your key';
 //* seleciona o elemento form
 const form = document.querySelector('form.search');
 //* seleciona o element div
@@ -75,15 +75,7 @@ async function fetchWeather(city){
         return data;
     }else{
         const weatherData = JSON.parse(localStorage.getItem(`${city.toLowerCase()}`));
-        console.log(weatherData);
-        const cityName = weatherData.name;
-        const html = `
-        <div>
-            <p>Cidade: ${cityName}</p>
-            <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
-        </div>
-        `
-        weatherGrid.innerHTML = html;
+        return weatherData;
     }
 }
 
