@@ -30,22 +30,29 @@ navigator.geolocation.getCurrentPosition((position) => {
     const map = `https://www.bing.com/maps/embed?h=400&w=500&cp=${lat}~${long}&lvl=19&typ=d&sty=r&src=SHELL&FORM=MBEDV8`
     console.log('lat -> '+ lat + ' long -> '+ long);
     const geolocationApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}`
-    const apicoords = fetch(`${proxy}${geolocationApi}`);
-    apicoords.then(response => {
-        response.json().then(data => {
-            console.log(data);
-            const city = data.name;
-            const html = `
-            <div>
-                <p>Latitude: ${lat}</p>
-                <p>Longitude: ${long}</p>
-                <p>Cidade: ${city}</p>
-                <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
-            </div>
-            `
-            weatherGrid.innerHTML = html;
+    if(localStorage.getItem('weather') !== null && localStorage.getItem('weather')!== 'undefined'){ 
+        const weather = JSON.parse(localStorage.getItem('weather'));
+        console.log(weather);
+    }else{
+        console.log("weather does not exist in localstorage")
+        const apicoords = fetch(`${proxy}${geolocationApi}`);
+        apicoords.then(response => {
+            response.json().then(data => {
+                console.log(data);
+                const city = data.name;
+                const html = `
+                <div>
+                    <p>Latitude: ${lat}</p>
+                    <p>Longitude: ${long}</p>
+                    <p>Cidade: ${city}</p>
+                    <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
+                </div>
+                `
+                weatherGrid.innerHTML = html;
+                localStorage.setItem('weather',data);
+            })
         })
-    })
+    }      
 });
 //* esta funcao vai usar a variavel 
 async function fetchWeather(city){
