@@ -32,7 +32,6 @@ navigator.geolocation.getCurrentPosition((position) => {
     const geolocationApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}`
     
     if(localStorage.getItem('weather') === null){
-        // Fetch data from API
         const apicoords = fetch(`${proxy}${geolocationApi}`);
         apicoords.then(response => {
             response.json().then(data => {
@@ -51,7 +50,6 @@ navigator.geolocation.getCurrentPosition((position) => {
             });
         });
     }else{
-        // Retrieve data from local storage
         const weatherData = JSON.parse(localStorage.getItem('weather'));
         console.log(weatherData);
         const city = weatherData.name;
