@@ -31,7 +31,7 @@ navigator.geolocation.getCurrentPosition((position) => {
     console.log('lat -> '+ lat + ' long -> '+ long);
     const geolocationApi = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${key}`
     
-    if(localStorage.getItem('weather') === null){
+    if(localStorage.getItem('localWeather') === null){
         const apicoords = fetch(`${proxy}${geolocationApi}`);
         apicoords.then(response => {
             response.json().then(data => {
@@ -46,11 +46,11 @@ navigator.geolocation.getCurrentPosition((position) => {
                 </div>
                 `
                 weatherGrid.innerHTML = html;
-                localStorage.setItem('weather', JSON.stringify(data));
+                localStorage.setItem('localWeather', JSON.stringify(data));
             });
         });
     }else{
-        const weatherData = JSON.parse(localStorage.getItem('weather'));
+        const weatherData = JSON.parse(localStorage.getItem('localWeather'));
         console.log(weatherData);
         const city = weatherData.name;
         const html = `
@@ -67,10 +67,24 @@ navigator.geolocation.getCurrentPosition((position) => {
 });
 //* esta funcao vai usar a variavel 
 async function fetchWeather(city){
-    //* variavel res e o resultado da consulta (parametro query) feita na api, o conteudo retornado pela api sera guardado na variavel res
-    const res = await fetch(`${proxy}${api}?q=${city}&appid=${key}`);
-    const data = await res.json();
-    return data;
+    if(localStorage.getItem(`${city.toLowerCase()}`) === null){
+        //* variavel res e o resultado da consulta (parametro query) feita na api, o conteudo retornado pela api sera guardado na variavel res
+        const res = await fetch(`${proxy}${api}?q=${city}&appid=${key}`);
+        const data = await res.json();
+        localStorage.setItem(`${city.toLowerCase()}`, JSON.stringify(data));
+        return data;
+    }else{
+        const weatherData = JSON.parse(localStorage.getItem(`${city.toLowerCase()}`));
+        console.log(weatherData);
+        const cityName = weatherData.name;
+        const html = `
+        <div>
+            <p>Cidade: ${cityName}</p>
+            <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
+        </div>
+        `
+        weatherGrid.innerHTML = html;
+    }
 }
 
 async function handleSubmit(event){
