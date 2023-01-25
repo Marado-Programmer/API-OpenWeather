@@ -17,59 +17,59 @@
  */
 
 type APIResponse = {
-  coord: {
-    lon: number
-    lat: number
-  }
-  weather: [
-    {
-      id: number
-      main: string
-      description: string
-      icon: string
+    coord: {
+        lon: number
+        lat: number
     }
-  ]
-  base: string
-  main: {
-    temp: number
-    feels_like: number
-    temp_min: number
-    temp_max: number
-    pressure: number
-    humidity: number
-    sea_level: number
-    grnd_level: number
-  }
-  visibility: number
-  wind: {
-    speed: number
-    deg: number
-    gust: number
-  }
-  rain: {
-    "1h": number
-    "3h": number
-  }
-  snow: {
-    "1h": number
-    "3h": number
-  }
-  clouds: {
-    all: number
-  }
-  dt: number
-  sys: {
-    type: number
+    weather: [
+        {
+            id: number
+            main: string
+            description: string
+            icon: string
+        }
+    ]
+    base: string
+    main: {
+        temp: number
+        feels_like: number
+        temp_min: number
+        temp_max: number
+        pressure: number
+        humidity: number
+        sea_level: number
+        grnd_level: number
+    }
+    visibility: number
+    wind: {
+        speed: number
+        deg: number
+        gust: number
+    }
+    rain: {
+        "1h": number
+        "3h": number
+    }
+    snow: {
+        "1h": number
+        "3h": number
+    }
+    clouds: {
+        all: number
+    }
+    dt: number
+    sys: {
+        type: number
+        id: number
+        message: unknown
+        country: string
+        sunrise: number
+        sunset: number
+    }
+    timezone: number
     id: number
-    message: unknown
-    country: string
-    sunrise: number
-    sunset: number
-  }
-  timezone: number
-  id: number
-  name: string
-  cod: number
+    name: string
+    cod: number
 };
 
 const api = new URL("https://api.openweathermap.org/data/2.5/weather");
@@ -147,19 +147,41 @@ navigator.geolocation.getCurrentPosition(async ({ coords }) => {
 });
 
 async function fetchWeather(city: string) {
-    if (sessionStorage.getItem(`${city.toLowerCase()}`) === null) {
-        const resource = new URL (api.toString(), proxy);
-        resource.searchParams.set("q", city);
-        resource.searchParams.set("appid", KEY);
+    const currentTimestamp = Date.now();
+    const storedWeather = localStorage.getItem(`${city.toLowerCase()}`);
 
+    const resource = new URL(api.toString(), proxy);
+    resource.searchParams.set("q", city);
+    resource.searchParams.set("appid", KEY);
+
+    if (storedWeather == null) {
         const res = await fetch(resource);
         const data = await res.json();
-        sessionStorage.setItem(`${city.toLowerCase()}`, JSON.stringify(data));
+
+        localStorage.setItem(`${city.toLowerCase()}`, JSON.stringify({
+            data,
+            timestamp: currentTimestamp
+        }));
+
         return data;
-    } else {
-        const weatherData = JSON.parse(sessionStorage.getItem(`${city.toLowerCase()}`) ?? "");
-        return weatherData;
     }
+
+    const storedWeatherData = JSON.parse(storedWeather);
+    const storedTimestamp = storedWeatherData.timestamp;
+
+    if (currentTimestamp - storedTimestamp > (1000 * 60 * 60)) {
+        const res = await fetch(resource);
+        const data = await res.json();
+
+        localStorage.setItem(`${city.toLowerCase()}`, JSON.stringify({
+            data,
+            timestamp: currentTimestamp
+        }));
+
+        return data;
+    }
+
+    return storedWeatherData;
 }
 
 async function handleSubmit(event: SubmitEvent) {
@@ -178,7 +200,9 @@ async function handleSubmit(event: SubmitEvent) {
     //weather_form.submit.disabled = false;
 
     //fetchWeather(weather_form.query.value);
-    displayWeather(weather); //here i can use all of the data the api gives me, weather.name, weather.clouds, weather.coord etc...
+    displayWeather(weather); // This is the data the api gives me, it will be
+                                // passed as an argument to the displayweather
+                                // function
 }
 
 function kToC(value: number) {
