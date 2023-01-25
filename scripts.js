@@ -48,7 +48,7 @@ navigator.geolocation.getCurrentPosition((position) => {
                     <h2>Cidade: ${city}</h2>
                     <p>Latitude: ${lat}</p>
                     <p>Longitude: ${long}</p>
-                    <p>Temperature: ${kToC(data.main.temp)}</p>
+                    <p>Temperature: ${kToC(data.main.temp)}Cº</p>
                     <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
                 </div>
                 `
@@ -62,9 +62,10 @@ navigator.geolocation.getCurrentPosition((position) => {
         const city = weatherData.name;
         const html = `
         <div>
+            <h2>Cidade: ${city}</h2>
             <p>Latitude: ${lat}</p>
             <p>Longitude: ${long}</p>
-            <p>Cidade: ${city}</p>
+            <p>Temperature: ${kToC(weatherData.main.temp)}Cº</p>
             <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
         </div>
         `
