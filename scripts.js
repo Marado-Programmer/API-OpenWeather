@@ -23,6 +23,12 @@ const key = '7b1013440267dc18a3e3de3646adda17';
 const form = document.querySelector('form.search');
 //* seleciona o element div
 const weatherGrid = document.querySelector('.weather');
+
+function kToC(value){
+    const conversao = Math.floor(value - 273.15);
+    return conversao;
+}
+
 navigator.geolocation.getCurrentPosition((position) => {
     console.log(position.coords.latitude, position.coords.longitude);
     const lat = position.coords.latitude;
@@ -39,9 +45,10 @@ navigator.geolocation.getCurrentPosition((position) => {
                 const city = data.name;
                 const html = `
                 <div>
+                    <h2>Cidade: ${city}</h2>
                     <p>Latitude: ${lat}</p>
                     <p>Longitude: ${long}</p>
-                    <p>Cidade: ${city}</p>
+                    <p>Temperature: ${kToC(data.main.temp)}</p>
                     <iframe width="500" height="400" frameborder="0" src="${map}" scrolling="no"></iframe>
                 </div>
                 `
@@ -93,10 +100,6 @@ async function handleSubmit(event){
     displayWeather(weather); //here i can use all of the data the api gives me, weather.name, weather.clouds, weather.coord etc...
 }
 
-function kToC(value){
-    const conversao = Math.floor(value - 273.15);
-    return conversao;
-}
 function displayWeather(tempo){ //this weather is the name of the city
     console.log('creating HTML');
     const html = `
