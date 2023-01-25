@@ -16,6 +16,56 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+type APIResponse = {
+  coord: {
+    lon: number
+    lat: number
+  }
+  weather: [
+    {
+      id: number
+      main: string
+      description: string
+      icon: string
+    }
+  ]
+  base: string
+  main: {
+    temp: number
+    feels_like: number
+    temp_min: number
+    temp_max: number
+    pressure: number
+    humidity: number
+    sea_level: number
+    grnd_level: number
+  }
+  visibility: number
+  wind: {
+    speed: number
+    deg: number
+    gust: number
+  }
+  rain: {
+    "1h": number
+  }
+  clouds: {
+    all: number
+  }
+  dt: number
+  sys: {
+    type: number
+    id: number
+    country: string
+    sunrise: number
+    sunset: number
+  }
+  timezone: number
+  id: number
+  name: string
+  cod: number
+};
+
 const api = new URL("https://api.openweathermap.org/data/2.5/weather");
 
 const proxy = new URL("https://cors-anywhere.herokuapp.com/");
@@ -130,12 +180,10 @@ function kToC(value: number) {
     return conversao;
 }
 
-function displayWeather(tempo: any) {
+function displayWeather(tempo: APIResponse) {
     if (weatherGrid == undefined) {
         return;
     }
-
-    console.log(tempo);
 
     const html = `
         <div>

@@ -2,6 +2,10 @@
 
 All notable changes to this publication will be documented in this file.
 
+## 1.2.0 - 2023-25-01
+
+Add type for API Response Body
+
 ## 1.1.0 - 2023-25-01
 
 Separated CSS
