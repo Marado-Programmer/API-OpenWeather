@@ -73,17 +73,30 @@ navigator.geolocation.getCurrentPosition((position) => {
     }
     
 });
+
 //* esta funcao vai usar a variavel 
+
 async function fetchWeather(city){
-    if(sessionStorage.getItem(`${city.toLowerCase()}`) === null){
-        //* variavel res e o resultado da consulta (parametro query) feita na api, o conteudo retornado pela api sera guardado na variavel res
+    const currentTimestamp = Date.now();
+    const storedWeather = localStorage.getItem(`${city.toLowerCase()}`);
+    if(storedWeather === null){
+        //* variavel res é o resultado da consulta (parametro query) feita na api, o conteudo retornado pela api sera guardado na variavel res
         const res = await fetch(`${proxy}${api}?q=${city}&appid=${key}`);
         const data = await res.json();
-        sessionStorage.setItem(`${city.toLowerCase()}`, JSON.stringify(data));
+        localStorage.setItem(`${city.toLowerCase()}`, JSON.stringify({data:data, timestamp: currentTimestamp}));
         return data;
-    }else{
-        const weatherData = JSON.parse(sessionStorage.getItem(`${city.toLowerCase()}`));
-        return weatherData;
+    } else {
+        const storedWeatherData = JSON.parse(storedWeather); // data of the weather available in the localstorage
+        const storedTimestamp = storedWeatherData.timestamp;
+        if(currentTimestamp - storedTimestamp > 3600 * 1000){ // more than 1 hour has passed since the last update
+            //* variavel res e o resultado da consulta (parametro query) feita na api, o conteudo retornado pela api sera guardado na variavel res
+            const res = await fetch(`${proxy}${api}?q=${city}&appid=${key}`);
+            const data = await res.json();
+            localStorage.setItem(`${city.toLowerCase()}`, JSON.stringify({data:data, timestamp: currentTimestamp}));
+            return data;
+        }else{
+            return storedWeatherData;
+        }
     }
 }
 
@@ -98,10 +111,10 @@ async function handleSubmit(event){
     weather_form.submit.disabled = false;
     
     //fetchWeather(weather_form.query.value);
-    displayWeather(weather); //here i can use all of the data the api gives me, weather.name, weather.clouds, weather.coord etc...
+    displayWeather(weather); //this is the data the api gives me, it will be passed as an argument to the displayweather funciton
 }
 
-function displayWeather(tempo){ //this weather is the name of the city
+function displayWeather(tempo){ //this param is the object returned by the api response, so i can select all of its properties, tempo.name, tempo.sys.country etc...
     console.log('creating HTML');
     const html = `
         <div>
@@ -112,7 +125,6 @@ function displayWeather(tempo){ //this weather is the name of the city
             <p>Description: ${tempo.weather[0].description}</p>
         </div>
     `;
-    
     weatherGrid.innerHTML += html;
 }
 
