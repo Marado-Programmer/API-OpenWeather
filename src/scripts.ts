@@ -99,7 +99,7 @@ navigator.geolocation.getCurrentPosition(async ({ coords }) => {
     geolocationApi.searchParams.set("lon", longitude.toString());
     geolocationApi.searchParams.set("appid", KEY);
 
-    if (localStorage.getItem("localWeather") == null) {
+    if (sessionStorage.getItem("localWeather") == null) {
         const apicoords = await fetch(new URL(geolocationApi.toString(), proxy));
 
         if (apicoords.ok) {
@@ -118,10 +118,10 @@ navigator.geolocation.getCurrentPosition(async ({ coords }) => {
                 weatherGrid.innerHTML = html;
             }
 
-            localStorage.setItem('localWeather', JSON.stringify(data));
+            sessionStorage.setItem('localWeather', JSON.stringify(data));
         }
     } else {
-        const data = localStorage.getItem('localWeather');
+        const data = sessionStorage.getItem('localWeather');
 
         if (data == null) {
             return;
@@ -147,17 +147,17 @@ navigator.geolocation.getCurrentPosition(async ({ coords }) => {
 });
 
 async function fetchWeather(city: string) {
-    if (localStorage.getItem(`${city.toLowerCase()}`) === null) {
+    if (sessionStorage.getItem(`${city.toLowerCase()}`) === null) {
         const resource = new URL (api.toString(), proxy);
         resource.searchParams.set("q", city);
         resource.searchParams.set("appid", KEY);
 
         const res = await fetch(resource);
         const data = await res.json();
-        localStorage.setItem(`${city.toLowerCase()}`, JSON.stringify(data));
+        sessionStorage.setItem(`${city.toLowerCase()}`, JSON.stringify(data));
         return data;
     } else {
-        const weatherData = JSON.parse(localStorage.getItem(`${city.toLowerCase()}`) ?? "");
+        const weatherData = JSON.parse(sessionStorage.getItem(`${city.toLowerCase()}`) ?? "");
         return weatherData;
     }
 }
