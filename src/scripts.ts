@@ -48,6 +48,11 @@ type APIResponse = {
   }
   rain: {
     "1h": number
+    "3h": number
+  }
+  snow: {
+    "1h": number
+    "3h": number
   }
   clouds: {
     all: number
@@ -56,6 +61,7 @@ type APIResponse = {
   sys: {
     type: number
     id: number
+    message: unknown
     country: string
     sunrise: number
     sunset: number
